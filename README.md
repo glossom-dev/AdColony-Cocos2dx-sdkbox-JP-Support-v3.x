@@ -15,6 +15,27 @@
 	$ cd ~/MyGame
 	$ sdkbox import adcolony
 
+###iOS 9サポート###
+Xcode 7ご利用してる場合、下記の手順を実装する必要があります。
+
+####App Transport Securityを無効に####
+下記をplistに設定してください。
+
+        <key>NSAppTransportSecurity</key>
+        <dict>
+            <key>NSAllowsArbitraryLoads</key>
+            <true/>
+        </dict>
+
+
+####Bitcodeを無効に####
+Bitcodeサポートを無効にしてください。有効の場合cocos2d-xのビルドがエラーになります。
+
+####Requires full screenを有効に####
+アプリは全方向対応でない場合は、Targets -> General -> Deployment Info -> Requires full screen にチェックしてください。チェックしない場合、アプルストアに提出するときにエラーになります。
+
+####canOpenURLを許可するURLリストの設定####
+これは利用してるプラグインによりますが、AdColonyを利用してる場合、[ここ](https://github.com/glossom-dev/AdColony-iOS-SDK-JP-Support/blob/master/iOS-9.md#canopenurlについて)を参照してください。
 ##Step 2: Configuration
 
 SDKBOXが自動的に`./Resource/sdkbox_config.json`を作成してくれるので、アプリで使用をする前にその設定を修正しなければいけません。
