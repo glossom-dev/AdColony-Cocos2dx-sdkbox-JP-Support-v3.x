@@ -16,7 +16,7 @@
 	$ sdkbox import adcolony
 
 ###iOS 9サポート###
-Xcode 7ご利用してる場合、下記の手順を実装する必要があります。
+Xcode 7をご利用の場合、下記の手順を実装する必要があります。
 
 ####App Transport Securityを無効に####
 下記をplistに設定してください。
@@ -32,10 +32,10 @@ Xcode 7ご利用してる場合、下記の手順を実装する必要があり�
 Bitcodeサポートを無効にしてください。有効の場合cocos2d-xのビルドがエラーになります。
 
 ####Requires full screenを有効に####
-アプリは全方向対応でない場合は、Targets -> General -> Deployment Info -> Requires full screen にチェックしてください。チェックしない場合、アプルストアに提出するときにエラーになります。
+アプリは全方向対応でない場合は、Targets -> General -> Deployment Info -> Requires full screen にチェックしてください。チェックをしない場合、ストア申請時にエラーになります。
 
 ####canOpenURLを許可するURLリストの設定####
-これは利用してるプラグインによりますが、AdColonyを利用してる場合、[ここ](https://github.com/glossom-dev/AdColony-iOS-SDK-JP-Support/blob/master/iOS-9.md#canopenurlについて)を参照してください。
+こちらは、利用しているプラグインによりますが、AdColonyを利用してる場合、[こちら](https://github.com/glossom-dev/AdColony-iOS-SDK-JP-Support/blob/master/iOS-9.md#canopenurlについて)を参照してください。
 ##Step 2: Configuration
 
 SDKBOXが自動的に`./Resource/sdkbox_config.json`を作成してくれるので、アプリで使用をする前にその設定を修正しなければいけません。
