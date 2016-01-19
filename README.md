@@ -193,39 +193,62 @@ sdkbox::PluginAdColony::setListener(this);
 
 ###Manual Integration For Android.
 
+SDKBOXは**command-line**、**eclipse**と**Android Studio**の3つAndroidプロジェクトをサポートしています。
+
+- `proj.android`はcommand-lineとeclipseプロジェクトの`<project_root>`として使用されます 
+- `proj.android-studio`はAndroid Studioプロジェクトの`<project_root>`として使用されます 
+
 **2.1 Copy Files**
 
-* **plugin/android/libs**フォルダーから下記の**jar**ファイルをプロジェクトの**proj.android/libs**下にコピーしてください。
+* **plugin/android/libs**フォルダーから下記の**jar**ファイルをあなたのプロジェクトの**/libs**下にコピーしてください。
 	* adcolony.jar
 	* PluginAdColony.jar
 	* sdkbox.jar
 
-* **plugin/android/jni**から`pluginadcolony` and `sdkbox`フォルダーをプロジェクトの**proj.android/jni/**にコピーしてください。
+>- もしcocos2d-xをソースコードからインストールした場合はjarファイルのコピー先はこちらです
+>  - Android command-line: `cocos2d/cocos/platform/android/java/libs`
+>  - Android Studio: `cocos2d/cocos/platform/android/libcocos2dx/libs`
+>- もしcocos2d-jsかluaを使用している場合はjarファイルのコピー先はこちらです
+>  - Android command-line: `frameworks/cocos2d-x/cocos/platform/android/java/libs`
+>  - Android Studio: `frameworks/cocos2d-x/cocos/platform/android/libcocos2dx/libs`
+>- もしビルド済みのcocos2d-xを使用している場合はjarファイルのコピー先はこちらです
+>  - Android command-line: `proj.android/libs`
+
+
+* **plugin/android/jni**からあなたのプロジェクトの**<project_root>/jni/**に全てのフォルダをコピー・上書きしてください。
+
+**注意:** SDKBOXはデフォルトで**gnustl**とリンクしています。もしあなたのプロジェクトが**c++static**とリンクしていたら、**<project_root>/jni/<plugin_name>/libs**内のファイルを**<project_root>/jni/<plugin_name>/libs_c++_static**内のファイルで置き換えてください
 
 **2.2 Edit AndroidManifest.xml**
 
 * `AndroidManifest.xml`ファイルに下記のパーミッションを追加してください。
 
-        <uses-permission android:name="android.permission.INTERNET" /\>
-        <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /\>
-        <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /\>
-        <uses-permission android:name="android.permission.VIBRATE" /\>
+```xml
+<uses-permission android:name="android.permission.INTERNET" /\>
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /\>
+<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /\>
+<uses-permission android:name="android.permission.VIBRATE" /\>
+```
 
 * **application**タグに下記のようにハードウェアアクセラレーションを有効にしてください。
 
-        <android:hardwareAccelerated="true" /\>
+```xml
+<android:hardwareAccelerated="true" /\>
+```
 
 * 下記のように、Acitivityの設定を**application**タグの間にコピーしてください。
 
-        <activity android:name="com.jirbo.adcolony.AdColonyOverlay"
-        	android:configChanges="keyboardHidden|orientation"
-        	android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" /\>
-        <activity android:name="com.jirbo.adcolony.AdColonyFullscreen"
-        	android:configChanges="keyboardHidden|orientation"
-        	android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" /\>
-        <activity android:name="com.jirbo.adcolony.AdColonyBrowser"
-        	android:configChanges="keyboardHidden|orientation"
-        	android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" /\>
+```xml
+<activity android:name="com.jirbo.adcolony.AdColonyOverlay"
+	android:configChanges="keyboardHidden|orientation"
+	android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" /\>
+<activity android:name="com.jirbo.adcolony.AdColonyFullscreen"
+	android:configChanges="keyboardHidden|orientation"
+	android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" /\>
+<activity android:name="com.jirbo.adcolony.AdColonyBrowser"
+	android:configChanges="keyboardHidden|orientation"
+	android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" /\>
+```
 
 **注意:** アプリがAPI レベル13以下に対応している場合、上記`configChanges`設定から`screenSize`を消してください。
 
@@ -249,7 +272,7 @@ sdkbox::PluginAdColony::setListener(this);
 
 **注意：** 既存に`$(call import-module,./prebuilt-mk)`がある場合、上記をその前に追加してください。
 
-**2.4  `Application.mk`の設定（Cocos2d-x v3.0 から v3.2 までのみ必要**
+**2.4  `Application.mk`の設定（Cocos2d-x v3.0 から v3.2 までのみ必要）**
 
  **proj.android/jni/Application.mk** を開いて、**APP_STL**を下記のように設定してください。
 
@@ -262,65 +285,106 @@ sdkbox::PluginAdColony::setListener(this);
 
 * まず、**Cocos2dxActivity.java**に必要なパケージをインポート：
 
-        import android.content.Intent;
-
-        import org.cocos2dx.plugin.PluginWrapper;
+```java
+import android.content.Intent;
+import com.sdkbox.plugin.SDKBox;
+```
 
 *  次に、`Cocos2dxActivity`の`onCreate(final  Bundle savedInstanceState)`に下記のようにプライグインの初期化コードを記述してください。
- `PluginWrapper.init(this);` は必ず `onLoadNativeLibraries();`の後に記述する必要があります。
+ `SDKBox.init(this);` は必ず `onLoadNativeLibraries();`の後に記述する必要があります。
 
-    onLoadNativeLibraries();
-    PluginWrapper.init(this);
+```cpp
+onLoadNativeLibraries();
+SDKBox.init(this);
+```
 
 * 最後に、下記のようにオバーライド関数を実装してください。
 
-        @Override
-        protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-            if (!PluginWrapper.onActivityResult(requestCode, resultCode, data)) {
-                super.onActivityResult(requestCode, resultCode, data);
-            }
-        }
+```cpp
+@Override
+protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    if (!SDKBox.onActivityResult(requestCode, resultCode, data)) {
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+}
 
-        @Override
-        protected void onStart() {
-            super.onStart();
-            PluginWrapper.onStart();
-        }
+@Override
+protected void onStart() {
+    super.onStart();
+    SDKBox.onStart();
+}
 
-        @Override
-        protected void onStop() {
-            super.onStop();
-            PluginWrapper.onStop();
-        }
+@Override
+protected void onStop() {
+    super.onStop();
+    SDKBox.onStop();
+}
 
-        @Override
-        protected void onResume() {
-            super.onResume();
-            PluginWrapper.onResume();
-        }
+@Override
+protected void onResume() {
+    super.onResume();
+    SDKBox.onResume();
+}
 
-        @Override
-        protected void onPause() {
-            super.onPause();
-            PluginWrapper.onPause();
-        }
+@Override
+protected void onPause() {
+    super.onPause();
+    SDKBox.onPause();
+}
 
-        @Override
-        public void onBackPressed() {
-            if (!PluginWrapper.onBackPressed()) {
-                super.onBackPressed();
-            }
-        }
+@Override
+public void onBackPressed() {
+    if (!SDKBox.onBackPressed()) {
+        super.onBackPressed();
+    }
+}
+```
 
 **Step 2.6: Proguardの設定 (リリース版, 任意)**
 
 * 下記のように、`project.properties` にProguardの設定ファイルを指定してください。
 
-        proguard.config=proguard.cfg
+        proguard.config=${sdk.dir}/tools/proguard/proguard-android.txt:proguard-project.txt
 
-*指定されたファイルに下記を追加してください。
+* 上記で指定したファイルに下記を追加してください。
 
+        # adcolony
         -dontwarn android.webkit.**
+
+        -dontwarn com.jirbo.adcolony.**
+        -keep public class com.jirbo.adcolony.** { public *; }
+
+
+        # cocos2d-x
+        -keep public class org.cocos2dx.** { *; }
+        -dontwarn org.cocos2dx.**
+        -keep public class com.chukong.** { *; }
+        -dontwarn com.chukong.**
+
+        # google play service
+        -keep public class com.google.android.gms.** { public *; }
+        -dontwarn com.google.android.gms.**
+
+        -keep class * extends java.util.ListResourceBundle {
+            protected Object[][] getContents();
+        }
+
+        -keep public class com.google.android.gms.common.internal.safeparcel.SafeParcelable {
+            public static final *** NULL;
+        }
+
+        -keepnames @com.google.android.gms.common.annotation.KeepName class *
+        -keepclassmembernames class * {
+            @com.google.android.gms.common.annotation.KeepName *;
+        }
+
+        -keepnames class * implements android.os.Parcelable {
+            public static final ** CREATOR;
+        }
+
+        #sdkbox
+        -keep public class com.sdkbox.** { *; }
+        -dontwarn com.sdkbox.**
 
 **注意：** Proguardはリリース版のビルドにしか利用することが出来ません。
 
