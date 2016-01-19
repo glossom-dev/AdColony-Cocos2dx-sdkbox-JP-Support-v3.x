@@ -223,26 +223,32 @@ SDKBOXは**command-line**、**eclipse**と**Android Studio**の3つAndroidプロ
 
 * `AndroidManifest.xml`ファイルに下記のパーミッションを追加してください。
 
-        <uses-permission android:name="android.permission.INTERNET" /\>
-        <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /\>
-        <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /\>
-        <uses-permission android:name="android.permission.VIBRATE" /\>
+```xml
+<uses-permission android:name="android.permission.INTERNET" /\>
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /\>
+<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /\>
+<uses-permission android:name="android.permission.VIBRATE" /\>
+```
 
 * **application**タグに下記のようにハードウェアアクセラレーションを有効にしてください。
 
-        <android:hardwareAccelerated="true" /\>
+```xml
+<android:hardwareAccelerated="true" /\>
+```
 
 * 下記のように、Acitivityの設定を**application**タグの間にコピーしてください。
 
-        <activity android:name="com.jirbo.adcolony.AdColonyOverlay"
-        	android:configChanges="keyboardHidden|orientation"
-        	android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" /\>
-        <activity android:name="com.jirbo.adcolony.AdColonyFullscreen"
-        	android:configChanges="keyboardHidden|orientation"
-        	android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" /\>
-        <activity android:name="com.jirbo.adcolony.AdColonyBrowser"
-        	android:configChanges="keyboardHidden|orientation"
-        	android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" /\>
+```xml
+<activity android:name="com.jirbo.adcolony.AdColonyOverlay"
+	android:configChanges="keyboardHidden|orientation"
+	android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" /\>
+<activity android:name="com.jirbo.adcolony.AdColonyFullscreen"
+	android:configChanges="keyboardHidden|orientation"
+	android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" /\>
+<activity android:name="com.jirbo.adcolony.AdColonyBrowser"
+	android:configChanges="keyboardHidden|orientation"
+	android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" /\>
+```
 
 **注意:** アプリがAPI レベル13以下に対応している場合、上記`configChanges`設定から`screenSize`を消してください。
 
@@ -279,54 +285,60 @@ SDKBOXは**command-line**、**eclipse**と**Android Studio**の3つAndroidプロ
 
 * まず、**Cocos2dxActivity.java**に必要なパケージをインポート：
 
-        import android.content.Intent;
-        import com.sdkbox.plugin.SDKBox;
+```java
+import android.content.Intent;
+import com.sdkbox.plugin.SDKBox;
+```
 
 *  次に、`Cocos2dxActivity`の`onCreate(final  Bundle savedInstanceState)`に下記のようにプライグインの初期化コードを記述してください。
  `SDKBox.init(this);` は必ず `onLoadNativeLibraries();`の後に記述する必要があります。
 
-        onLoadNativeLibraries();
-        SDKBox.init(this);
+```cpp
+onLoadNativeLibraries();
+SDKBox.init(this);
+```
 
 * 最後に、下記のようにオバーライド関数を実装してください。
 
-        @Override
-        protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-            if (!SDKBox.onActivityResult(requestCode, resultCode, data)) {
-                super.onActivityResult(requestCode, resultCode, data);
-            }
-        }
+```cpp
+@Override
+protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    if (!SDKBox.onActivityResult(requestCode, resultCode, data)) {
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+}
 
-        @Override
-        protected void onStart() {
-            super.onStart();
-            SDKBox.onStart();
-        }
+@Override
+protected void onStart() {
+    super.onStart();
+    SDKBox.onStart();
+}
 
-        @Override
-        protected void onStop() {
-            super.onStop();
-            SDKBox.onStop();
-        }
+@Override
+protected void onStop() {
+    super.onStop();
+    SDKBox.onStop();
+}
 
-        @Override
-        protected void onResume() {
-            super.onResume();
-            SDKBox.onResume();
-        }
+@Override
+protected void onResume() {
+    super.onResume();
+    SDKBox.onResume();
+}
 
-        @Override
-        protected void onPause() {
-            super.onPause();
-            SDKBox.onPause();
-        }
+@Override
+protected void onPause() {
+    super.onPause();
+    SDKBox.onPause();
+}
 
-        @Override
-        public void onBackPressed() {
-            if (!SDKBox.onBackPressed()) {
-                super.onBackPressed();
-            }
-        }
+@Override
+public void onBackPressed() {
+    if (!SDKBox.onBackPressed()) {
+        super.onBackPressed();
+    }
+}
+```
 
 **Step 2.6: Proguardの設定 (リリース版, 任意)**
 
