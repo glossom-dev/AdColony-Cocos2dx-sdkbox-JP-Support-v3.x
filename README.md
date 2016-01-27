@@ -200,7 +200,7 @@ SDKBOXは**command-line**、**eclipse**と**Android Studio**の3つAndroidプロ
 
 **2.1 Copy Files**
 
-* **plugin/android/libs**フォルダーから下記の**jar**ファイルをあなたのプロジェクトの**/libs**下にコピーしてください。
+* **.sdkbox/plugins/sdkbox-adcolony_vX.Y.Z/plugin/android/libs**フォルダーから下記の**jar**ファイルをあなたのプロジェクトの**/libs**下にコピーしてください。
 	* adcolony.jar
 	* PluginAdColony.jar
 	* sdkbox.jar
