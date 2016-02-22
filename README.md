@@ -170,7 +170,6 @@ sdkbox::PluginAdColony::setListener(this);
     * AudioToolbox.framework
     * AVFoundation.framework
     * CoreGraphics.framework
-    * installation_guide-html.html
     * CoreMedia.framework
     * CoreTelephony.framework
     * EventKit.framework
