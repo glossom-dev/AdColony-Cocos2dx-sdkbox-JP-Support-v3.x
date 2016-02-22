@@ -178,6 +178,7 @@ sdkbox::PluginAdColony::setListener(this);
     * MessageUI.framework
     * QuartzCore.framework
     * Security.framework
+    * GameController.framework
     * Social.framework (Set to Optional)
     * StoreKit.framework (Set to Optional)
     * SystemConfiguration.framework
@@ -187,7 +188,7 @@ sdkbox::PluginAdColony::setListener(this);
 
 * **Target > Build Settings > Linking > Other Linker Flags**を開いて、下記の二つのフラグを設定してください。
 
-        -force_load AdColony.framework/AdColony
+        -ObjC
         -fobjc-arc (AdColonyではARCを設定していないプロジェクトでも利用することができます。)
 
 ###Manual Integration For Android.
