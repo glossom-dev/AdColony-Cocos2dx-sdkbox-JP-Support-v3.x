@@ -149,6 +149,24 @@ private:
 sdkbox::PluginAdColony::setListener(this);
 ```
 
+#### BGMを利用するアプリに関して
+
+`onAdColonyStarted`と`onAdColonyFinished`内にBGMの一時停止・再開処理を実装してください。
+
+```cpp
+void MyClass::onAdColonyStarted(const sdkbox::AdColonyAdInfo &info)
+{
+  // SimpleAudioEngineを利用している場合
+  CocosDenshion::SimpleAudioEngine::getInstance()->pauseBackgroundMusic();
+}
+
+void MyClass::onAdColonyFinished(const sdkbox::AdColonyAdInfo &info)
+{
+  // SimpleAudioEngineを利用している場合
+  CocosDenshion::SimpleAudioEngine::getInstance()->resumeBackgroundMusic();
+}
+```
+
 ##Manual Integration
 
 もしSDKBOXのインストーラーが正常に処理を完了しない場合、SDKBOXをマニュアルで統合することが可能です。インストーラーが正常に処理を完了した場合は、これ以降のドキュメントの内容は必要ありません。
